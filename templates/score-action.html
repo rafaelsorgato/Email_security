@@ -1,0 +1,79 @@
+<div class="pagetitle">
+  <h1>Score</h1>
+</div>
+
+<section class="section profile">
+  <div class="row">
+    <div class="">
+      <div class="card">
+        <div class="card-body pt-3">
+          <ul class="nav nav-tabs nav-tabs-bordered">
+            <li class="nav-item">
+              <a class="nav-link" href="/score" data-bs-target="#file-text">Send new score</a>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#file-text">Score Action</button>
+
+            </li>
+          </ul>
+
+          <div class="tab-content pt-1">
+            <div class="tab-pane fade show active pt-1" id="file-text">
+              <form method="POST" enctype="multipart/form-data">
+                <div class="row mb-3">
+                  <div><h4>Necessary score to</h4></div>
+                  <br>
+                  <br>
+                  <div class="row mb-3">
+                    <label for="delete" class="col-md-3 col-lg-2 col-form-label">Delete email</label>
+                    <div class="col-md-8 col-lg-1">
+                      <input name="delete" type="number" class="form-control" id="delete" value="{{ delete }}" required>
+                    </div>
+                  </div>
+                <div class="row mb-3">
+                  <label for="quarantine" class="col-md-3 col-lg-2 col-form-label">Quarantine</label>
+                  <div class="col-md-8 col-lg-1">
+                    <input name="quarantine" type="number" class="form-control" id="quarantine" value="{{ quarantine }}" required>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" id="save-changes-btn" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+
+$('#save-changes-btn').click(function () {
+    var formData = {
+      delete: $('#delete').val(),
+      quarantine: $('#quarantine').val()
+    };
+    if (formData['delete'] && formData['quarantine']){
+    $.ajax({
+      url: '/save_action',
+      type: 'POST',
+      data: JSON.stringify(formData), 
+      contentType: 'application/json', 
+      success: function (response) {
+        window.location.href = '/result?result=' + response["message"];
+      },
+      error: function (error) {
+        console.error(error);
+      }
+    });
+    }
+  });
+
+
+  
+</script>
+
+
+

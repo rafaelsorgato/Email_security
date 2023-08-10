@@ -1,0 +1,149 @@
+<div class="pagetitle">
+    <h1>Update a user</h1>
+  </div>
+  <section class="section profile">
+    <div class="row">
+      <div class="">
+        <div class="card">
+          <div class="card-body pt-3">
+            <div class="tab-content pt-1">
+              <div class="tab-pane fade profile-edit active show pt-1" id="profile-edit">
+                <form id="profile-edit-form" method="POST" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                      <label for="userSelect" class="col-md-3 col-lg-2 col-form-label">Select User</label>
+                      <div class="col-md-8 col-lg-6">
+                        <select name="userSelect" id="userSelect" class="form-select" onchange="showSelectedUser()">
+                          <option value="">Select a user</option>
+                          {% for user in users %}
+                          <option value="{{ user[0] }}">{{ user[0] }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    {% for user in users %}
+                    <div id="{{ user[0] }}" class="row mb-3 userFields" style="display: none;">
+                      <label for="{{ user[0] }}-picture" class="col-md-4 col-lg-2 col-form-label">Profile Image</label>
+                      <div class="col-md-8 col-lg-6">
+                        <img src="{{ user[4] }}" alt="Profile">
+                        <div class="mb-3">
+                          <label for="{{ user[0] }}-picture" class="form-label">Upload new profile image</label>
+                          <input type="file" class="form-control" id="{{ user[0] }}-picture" name="picture">
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div id="{{ user[0] }}" class="row mb-3 userFields" style="display: none;">
+                      <label for="{{ user[0] }}-username" class="col-md-3 col-lg-2 col-form-label">*Username</label>
+                      <div class="col-md-8 col-lg-6">
+                        <input name="username" type="text" class="form-control" style="background-color:rgb(203, 201, 201)" id="{{ user[0] }}-username" value="{{ user[0] }}" readonly>
+                      </div>
+                    </div>
+                    <div id="{{ user[0] }}" class="row mb-3 userFields" style="display: none;">
+                        <label for="fullName" class="col-md-3 col-lg-2 col-form-label">*Full Name</label>
+                        <div class="col-md-8 col-lg-6">
+                            <input name="fullname" type="text" class="form-control" id="fullname" value="{{ user[1] }}" required>
+                        </div>
+                    </div>
+                    <div id="{{ user[0] }}" class="row mb-3 userFields" style="display: none;">
+                        <label for="permission" class="col-md-3 col-lg-2 col-form-label">*Permission</label>
+                        <div class="col-md-8 col-lg-6">
+                            <select name="permission" class="form-select" id="permission" required>
+                                <option value="user" {% if user[3] == 'user' %} selected {% endif %}>user</option>
+                                <option value="admin" {% if user[3] == 'admin' %} selected {% endif %}>admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="{{ user[0] }}" class="row mb-3 userFields" style="display: none;">
+                        <label for="{{ user[0] }}-password" class="col-md-3 col-lg-2 col-form-label">New Password</label>
+                        <div class="col-md-8 col-lg-6 d-flex align-items-center">
+                            <input type="password" class="form-control password" name="password" id="{{ user[0] }}-password">
+                            <i class="bi bi-eye-slash togglePassword" style="cursor: pointer; margin-left: 5px;"></i>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary" onclick="submitForm('update')">Update User</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+function showSelectedUser() {
+  var selectBox = document.getElementById("userSelect");
+  var selectedUsername = selectBox.options[selectBox.selectedIndex].value;
+
+  var users = document.getElementsByClassName("userFields");
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].id === selectedUsername) {
+      users[i].style.display = "block";
+    } else {
+      users[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+<script>
+  
+const togglePasswordElements = document.querySelectorAll(".togglePassword");
+togglePasswordElements.forEach(function (togglePassword) {
+    const password = togglePassword.previousElementSibling;
+    togglePassword.addEventListener("click", function () {
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        this.classList.toggle("bi-eye");
+    });
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+  function submitForm(action) {
+  var formData = new FormData();
+
+  var userFields = $(".userFields:visible");
+  userFields.each(function() {
+    var inputs = $(this).find("input");
+    var files = $(this).find("input[type='file']");
+    files.each(function() {
+      var fileInput = $(this)[0];
+      var filesList = fileInput.files;
+      if (filesList.length > 0) {
+        formData.append($(this).attr("name"), filesList[0]);
+      }
+    });
+    inputs.each(function() {
+      formData.append($(this).attr("name"), $(this).val());
+    });
+    var selects = $(this).find("select");
+    selects.each(function() {
+      formData.append($(this).attr("name"), $(this).val());
+    });
+  });
+
+  formData.append("action", action); 
+
+  $.ajax({
+    url: "/update",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    dataType: 'json', 
+    success: function(response) {
+      window.location.href = '/result?result=' + response.result;
+    },
+    error: function(xhr, status, error) {
+      console.error(error);
+    }
+  });
+}
+
+</script>

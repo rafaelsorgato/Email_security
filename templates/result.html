@@ -1,0 +1,17 @@
+    <div class="container">
+
+      <section class="section error-404 min-vh-100 d-flex flex-column align-items-center justify-content-center">
+        <h2 id="result"></h2>
+        <a id="url" class="btn" href="">Back</a>
+      </section>
+
+    </div>
+<script>
+const params = new URLSearchParams(document.location.search);
+const result = params.get("result");
+const url = params.get("url");
+
+document.getElementById("result").innerHTML=result
+document.getElementById("url").href = url
+
+</script>

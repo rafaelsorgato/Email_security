@@ -1,0 +1,79 @@
+    <div class="pagetitle">
+      <h1>Charts</h1>
+    </div>
+
+    <section class="section">
+      <div class="row">
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Actions/Month</h5>
+
+              <div id="lineChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart"), {
+                    series: [{
+                      name: "Actions",
+                      data: JSON.parse("{{values_list}}")
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'straight'
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#f3f3f3', 'transparent'], 
+                        opacity: 0.5
+                      },
+                    },
+                    xaxis: {
+                      categories: JSON.parse('{{months_list|safe }}'),
+                    }
+                  }).render();
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Actions in {{ month }}</h5>
+              <div id="pieChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#pieChart"), {
+                    series: JSON.parse("{{piechart}}"),
+                    chart: {
+                      height: 350,
+                      type: 'pie',
+                      toolbar: {
+                        show: true
+                      }
+                    },
+                    labels: ['Quarantined', 'Deleted', 'Only Score']
+                  }).render();
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
