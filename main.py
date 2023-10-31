@@ -7,7 +7,7 @@ import get_emails
 import calendar
 from datetime import datetime
 app = Flask(__name__)
-app.secret_key = 'SECRET5521521'
+app.secret_key = 'SECRET123'
 app.config['UPLOAD_FOLDER'] = "static/Uploads"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=3000)
 app.config['IMAGES_FOLDER'] = "static/images"
