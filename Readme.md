@@ -1,6 +1,6 @@
 # Email_security
-
-
+#### Video Demo:  https://youtu.be/QsUI1hX4OzM
+#### Description: This program aims to detect possible advertising or phishing emails, detection is done by using regex or wildcard.
 
 STEPS:
 To use, simply download all files, install all requirements in requirements.txt and run main.py.
